@@ -1,27 +1,28 @@
-# PaperUmbrella
+# Injector lazy load component problem
+
+Sample code to reproduce an issue lazy loading modules with services with the provide in set to root.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.14.
+
+## Architecture
+
+The "lazy" module is lazy loaded in the main app component.
+The lazy module has a service that needs some configuration in order to work, the service expects the configuration to be listed in the providers in the module.
+That service also has the Injectable decorator with the attribute providedIn set to root.
+
+<img src="diagram.png">
+
+## Issue
+
+If you run the application you get the following error:
+
+```
+NullInjectorError: No provider for LazyConfig!
+```
+
+If we move the configuration from the lazy module to the app module the code works.
+It would be nice to not include those configs in the app module before the lazy module is loaded to not defeat the purpose of lazy loading that module.
 
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
